@@ -38,21 +38,21 @@ describe_instance_status() {
   if [[ $EVENT_FILTER_COMPLETED == "true" ]]
   then
     aws ec2 describe-instance-status --profile $ACCOUNT --region $region --output text --instance-ids $instance \
-      --filters "Name=event.code,Values=instance-reboot,system-reboot,system-maintenance,instance-retirement" \
-      | grep EVENTS
+      --filters "Name=event.code,Values=instance-reboot,system-reboot,system-maintenance,instance-retirement,instance-stop" \
+      | grep -i EVENTS
   else
     aws ec2 describe-instance-status --profile $ACCOUNT --region $region --output text --instance-ids $instance \
-      --filters "Name=event.code,Values=instance-reboot,system-reboot,system-maintenance,instance-retirement" \
-      | grep EVENTS | grep -v -E 'Completed|Canceled'
+      --filters "Name=event.code,Values=instance-reboot,system-reboot,system-maintenance,instance-retirement,instance-stop" \
+      | grep -i EVENTS | grep -v -E 'Completed|Canceled'
   fi
 }
 
 instance_name() {
   instance_id=$1
   region=$2
-  aws ec2 describe-instances --profile $ACCOUNT --region $region --output text --instance-id $instance_id | grep TAGS | cut -f 3
+  aws ec2 describe-instances --profile $ACCOUNT --region $region --output text --instance-id $instance_id | grep -i TAGS | cut -f 3
 }
-
+echo $EC2_REGIONS
 for region in $EC2_REGIONS; do
   echo "Region: $region"
 
