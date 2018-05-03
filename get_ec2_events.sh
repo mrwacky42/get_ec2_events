@@ -52,7 +52,7 @@ instance_name() {
   region=$2
   aws ec2 describe-instances --profile $ACCOUNT --region $region --output text --instance-id $instance_id | grep -i TAGS | cut -f 3
 }
-echo $EC2_REGIONS
+
 for region in $EC2_REGIONS; do
   echo "Region: $region"
 
